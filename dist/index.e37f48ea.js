@@ -533,7 +533,7 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"aenu9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _webImmediateJs = require("core-js/modules/web.immediate.js");
+var _webImmediateJs = require("core-js/modules/web.immediate.js"); // window.addEventListener('hashchange', showRecipe);
 var _iconsSvg = require("url:../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 var _runtime = require("regenerator-runtime/runtime");
@@ -558,9 +558,14 @@ function renderSpiner(parentEL) {
     parentEL.innerHTML = "";
     recipeContainer.insertAdjacentHTML("afterbegin", markup);
 }
-async function showRecipe(url) {
+async function showRecipe() {
     // Load recipe
     try {
+        const recipeId = window.location.hash.slice(1);
+        console.log(recipeId);
+        if (!recipeId) return;
+        let url = `https://forkify-api.herokuapp.com/api/get?rId=${recipeId}`;
+        console.log(url);
         renderSpiner(recipeContainer);
         const res = await fetch(url);
         const data = await res.json();
@@ -690,7 +695,11 @@ async function showRecipe(url) {
 }
 const recipeUrl = "https://forkify-api.herokuapp.com/api/get?rId=47746";
 const recipeUrl1 = "https://forkify-api.herokuapp.com/api/get?rId=47744";
-showRecipe(recipeUrl1);
+// showRecipe(recipeUrl1);
+[
+    "hashchange",
+    "load"
+].forEach((ev)=>window.addEventListener(ev, showRecipe));
 
 },{"url:../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","regenerator-runtime/runtime":"dXNgZ","core-js/modules/web.immediate.js":"49tUX"}],"loVOp":[function(require,module,exports) {
 module.exports = require("./helpers/bundle-url").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
