@@ -23,7 +23,7 @@ async function showRecipe(url) {
         //   image: recipe.image_url,
         //   pulisher: recipe.publish,
         // };
-        console.log(recipe);
+        console.log(data);
         const renderRecipe = ` <div class="spinner">
     <svg>
       <use href="src/img/icons.svg#icon-loader"></use>
@@ -52,7 +52,7 @@ async function showRecipe(url) {
       <svg class="recipe__info-icon">
         <use href="src/img/icons.svg#icon-clock"></use>
       </svg>
-      <span class="recipe__info-data recipe__info-data--minutes">${recipe.title}</span>
+      <span class="recipe__info-data recipe__info-data--minutes">45</span>
       <span class="recipe__info-text">minutes</span>
     </div>
     <div class="recipe__info">
@@ -91,27 +91,25 @@ async function showRecipe(url) {
   <div class="recipe__ingredients">
     <h2 class="heading--2">Recipe ingredients</h2>
     <ul class="recipe__ingredient-list">
+
+    ${recipe.ingredients.map((ing)=>{
+            return `
       <li class="recipe__ingredient">
-        <svg class="recipe__icon">
-          <use href="src/img/icons.svg#icon-check"></use>
-        </svg>
-        <div class="recipe__quantity">1000</div>
-        <div class="recipe__description">
-          <span class="recipe__unit">g</span>
-          pasta
-        </div>
-      </li>
+      <svg class="recipe__icon">
+        <use href="src/img/icons.svg#icon-check"></use>
+      </svg>
+      
+      <div class="recipe__description">
+        <span class="recipe__unit"></span>
+        ${ing}
+      </div>
+    </li>`;
+        }).join("")}
+
+
+
+     
   
-      <li class="recipe__ingredient">
-        <svg class="recipe__icon">
-          <use href="src/img/icons.svg#icon-check"></use>
-        </svg>
-        <div class="recipe__quantity">0.5</div>
-        <div class="recipe__description">
-          <span class="recipe__unit">cup</span>
-          ricotta cheese
-        </div>
-      </li>
     </ul>
   </div>
   
@@ -134,6 +132,7 @@ async function showRecipe(url) {
     </a>
   </div>
   `;
+        recipeContainer.innerHTML = "";
         recipeContainer.insertAdjacentHTML("afterbegin", renderRecipe);
     } catch  {
         alert("there is an error");
