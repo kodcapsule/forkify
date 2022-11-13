@@ -11,7 +11,7 @@ export async function getRecipe(recipeId) {
     const res = await fetch(url);
     const data = await res.json();
     if (!res.ok) throw new Error(`${data.message}`);
-    console.log(data);
+    // console.log(data);
 
     let { recipe } = data;
     state.recipe = recipe;

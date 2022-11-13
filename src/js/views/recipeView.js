@@ -1,3 +1,6 @@
+// import icons from 'url:../views/js/img/icons.svg';
+
+import icons from 'url:../../img/icons.svg';
 class recipeView {
   #parenElement = document.querySelector('.recipe');
   #data;
@@ -5,16 +8,29 @@ class recipeView {
   render(data) {
     this.#data = data;
 
-    recipeContainer.innerHTML = '';
     const markup = this.#generateMarkup();
+    this.#clearElement();
 
     console.log(markup);
-    recipeContainer.insertAdjacentHTML('afterbegin', markup);
+    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderSpiner() {
+    const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${icons}#icon-loader"></use>
+      </svg>
+  </div>`;
+    this.#clearElement;
+    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
+  }
+  #clearElement() {
+    this.#parenElement.innerHTML = '';
   }
 
   #generateMarkup() {
-    return `  
-    
+    return `   
   
     <!--  <div class="error">
         <div>
@@ -78,9 +94,8 @@ class recipeView {
     
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
-      <ul class="recipe__ingredient-list">
-  
-      ${recipe.ingredients
+      <ul class="recipe__ingredient-list">  
+      ${this.#data.ingredients
         .map(ing => {
           return `
         <li class="recipe__ingredient">
