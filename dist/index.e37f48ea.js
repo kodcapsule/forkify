@@ -1709,16 +1709,15 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "getRecipe", ()=>getRecipe);
 var _regeneratorRuntime = require("regenerator-runtime");
+var _config = require("./config");
+var _helpers = require("./helpers");
 const state = {
     recipe: {}
 };
 async function getRecipe(recipeId) {
     try {
-        let url = `https://forkify-api.herokuapp.com/api/get?rId=${recipeId}`;
-        console.log(url);
-        const res = await fetch(url);
-        const data = await res.json();
-        if (!res.ok) throw new Error(`${data.message}`);
+        let url = `${(0, _config.API_URL)}=${recipeId}`;
+        const data = await (0, _helpers.getJSON)(url);
         // console.log(data);
         let { recipe  } = data;
         state.recipe = recipe;
@@ -1728,7 +1727,7 @@ async function getRecipe(recipeId) {
     }
 }
 
-},{"regenerator-runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dXNgZ":[function(require,module,exports) {
+},{"regenerator-runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs","./helpers":"hGI1E"}],"dXNgZ":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -2339,7 +2338,26 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"l60JC":[function(require,module,exports) {
+},{}],"k5Hzs":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL);
+const API_URL = "https://forkify-api.herokuapp.com/api/get?rId";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGI1E":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getJSON", ()=>getJSON);
+async function getJSON(url) {
+    try {
+        console.log(url);
+        const res = await fetch(url);
+        const data = await res.json();
+        return data;
+    } catch (err) {}
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l60JC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 // import icons from 'url:../views/js/img/icons.svg';
