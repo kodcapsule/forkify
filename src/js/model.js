@@ -7,15 +7,13 @@ export const state = {
 
 export async function getRecipe(recipeId) {
   try {
-    let url = `${API_URL}=${recipeId}`;
-    const data = await getJSON(url);
+    const data = await getJSON(`${API_URL}=${recipeId}`);
     // console.log(data);
-
     let { recipe } = data;
     state.recipe = recipe;
 
     console.log(state.recipe);
   } catch (err) {
-    alert(`${err} occured`);
+    alert(`${err} occured and it is happening in the model`);
   }
 }
