@@ -38,4 +38,10 @@ async function showRecipe() {
   }
 }
 
-['hashchange', 'load'].forEach(ev => window.addEventListener(ev, showRecipe));
+// ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, showRecipe));
+
+const init = function () {
+  recipeView.addEventHandler(showRecipe);
+};
+
+init();

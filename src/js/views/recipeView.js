@@ -29,6 +29,10 @@ class recipeView {
     this.#parenElement.innerHTML = '';
   }
 
+  addEventHandler(handle) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handle));
+  }
+
   #generateMarkup() {
     return `   
   
