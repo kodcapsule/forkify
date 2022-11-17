@@ -533,7 +533,14 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"aenu9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _webImmediateJs = require("core-js/modules/web.immediate.js");
+var _webImmediateJs = require("core-js/modules/web.immediate.js"); // var obj = {
+ //   length: 20,
+ //   height: 35,
+ // };
+ // if ('breadth' in obj === false) {
+ //   obj.breadth = 22;
+ // }
+ // console.log(obj.breadth);
 var _modelJs = require("./model.js");
 var _recipeView = require("./views/recipeView");
 var _recipeViewDefault = parcelHelpers.interopDefault(_recipeView);
@@ -562,7 +569,8 @@ async function showRecipe() {
         (0, _recipeViewDefault.default).render(_modelJs.state.recipe);
         console.log(_modelJs.state.recipe);
     } catch (err) {
-        alert(`${err} 1010`);
+        // alert(`${err} 1010`);
+        (0, _recipeViewDefault.default).renderError();
     }
 }
 // ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, showRecipe));
@@ -1716,7 +1724,8 @@ async function getRecipe(recipeId) {
         state.recipe = recipe;
         console.log(state.recipe);
     } catch (err) {
-        alert(`${err} occured and it is happening in the model`);
+        // alert(`${err} occured and it is happening in the model`);
+        throw err;
     }
 }
 
@@ -2374,6 +2383,8 @@ var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class recipeView {
     #parenElement = document.querySelector(".recipe");
     #data;
+    #errorMessage = `Could not find recipe with this 101, please try again`;
+    #message = "";
     render(data) {
         this.#data = data;
         const markup = this.#generateMarkup();
@@ -2391,6 +2402,28 @@ class recipeView {
         this.#clearElement;
         this.#parenElement.insertAdjacentHTML("afterbegin", markup);
     }
+    renderError(message = this.#errorMessage) {
+        const markup = `<div class="error">
+    <div>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+      </svg>
+    </div>
+    <p>${message}</p>
+  </div>`;
+        this.#clearElement;
+        this.#parenElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this.#message) {
+        const markup = `<div class="message">
+    <div>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+      </svg>
+    </div>
+    <p>${message}</p>
+  </div>`;
+        this.#clearElement;
+        this.#parenElement.insertAdjacentHTML("afterbegin", markup);
+    }
      #clearElement() {
         this.#parenElement.innerHTML = "";
     }
@@ -2401,16 +2434,7 @@ class recipeView {
         ].forEach((ev)=>window.addEventListener(ev, handle));
     }
      #generateMarkup() {
-        return `   
-  
-    <!--  <div class="error">
-        <div>
-          <svg>
-            <use href="${0, _iconsSvgDefault.default}#icon-alert-triangle"></use>
-          </svg>
-        </div>
-        <p>No recipes found for your query. Please try again!</p>
-      </div> -->
+        return `     
     
     
     <figure class="recipe__fig">

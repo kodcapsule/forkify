@@ -34,7 +34,9 @@ async function showRecipe() {
     recipeView.render(model.state.recipe);
     console.log(model.state.recipe);
   } catch (err) {
-    alert(`${err} 1010`);
+    // alert(`${err} 1010`);
+
+    recipeView.renderError();
   }
 }
 
@@ -45,3 +47,14 @@ const init = function () {
 };
 
 init();
+
+// var obj = {
+//   length: 20,
+//   height: 35,
+// };
+
+// if ('breadth' in obj === false) {
+//   obj.breadth = 22;
+// }
+
+// console.log(obj.breadth);

@@ -4,6 +4,8 @@ import icons from 'url:../../img/icons.svg';
 class recipeView {
   #parenElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = `Could not find recipe with this 101, please try again`;
+  #message = '';
 
   render(data) {
     this.#data = data;
@@ -25,6 +27,33 @@ class recipeView {
     this.#clearElement;
     this.#parenElement.insertAdjacentHTML('afterbegin', markup);
   }
+
+  renderError(message = this.#errorMessage) {
+    const markup = `<div class="error">
+    <div>
+        <use href="${icons}#icon-alert-triangle"></use>
+      </svg>
+    </div>
+    <p>${message}</p>
+  </div>`;
+
+    this.#clearElement;
+    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderMessage(message = this.#message) {
+    const markup = `<div class="message">
+    <div>
+        <use href="${icons}#icon-smile"></use>
+      </svg>
+    </div>
+    <p>${message}</p>
+  </div>`;
+
+    this.#clearElement;
+    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
   #clearElement() {
     this.#parenElement.innerHTML = '';
   }
@@ -34,16 +63,7 @@ class recipeView {
   }
 
   #generateMarkup() {
-    return `   
-  
-    <!--  <div class="error">
-        <div>
-          <svg>
-            <use href="${icons}#icon-alert-triangle"></use>
-          </svg>
-        </div>
-        <p>No recipes found for your query. Please try again!</p>
-      </div> -->
+    return `     
     
     
     <figure class="recipe__fig">

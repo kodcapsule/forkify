@@ -14,6 +14,7 @@ export async function getRecipe(recipeId) {
 
     console.log(state.recipe);
   } catch (err) {
-    alert(`${err} occured and it is happening in the model`);
+    // alert(`${err} occured and it is happening in the model`);
+    throw err;
   }
 }
