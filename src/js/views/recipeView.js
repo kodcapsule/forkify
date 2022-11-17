@@ -13,7 +13,7 @@ class recipeView {
     const markup = this.#generateMarkup();
     this.#clearElement();
 
-    console.log(markup);
+    // console.log(markup);
     this.#parenElement.insertAdjacentHTML('afterbegin', markup);
   }
 

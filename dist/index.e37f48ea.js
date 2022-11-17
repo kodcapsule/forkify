@@ -533,31 +533,14 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"aenu9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _webImmediateJs = require("core-js/modules/web.immediate.js"); // var obj = {
- //   length: 20,
- //   height: 35,
- // };
- // if ('breadth' in obj === false) {
- //   obj.breadth = 22;
- // }
- // console.log(obj.breadth);
+var _webImmediateJs = require("core-js/modules/web.immediate.js"); // showSearchResuls();
 var _modelJs = require("./model.js");
 var _recipeView = require("./views/recipeView");
 var _recipeViewDefault = parcelHelpers.interopDefault(_recipeView);
+var _searchViewJs = require("./views/searchView.js");
+var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _runtime = require("regenerator-runtime/runtime");
-// const recipeContainer = document.querySelector('.recipe');
-// https://forkify-api.herokuapp.com/v2
-///////////////////////////////////////
-// function renderSpiner(parentEL) {
-//   const markup = `
-//   <div class="spinner">
-//     <svg>
-//       <use href="${icons}#icon-loader"></use>
-//     </svg>
-// </div>`;
-//   parentEL.innerHTML = '';
-//   recipeContainer.insertAdjacentHTML('afterbegin', markup);
-// }
+var _regeneratorRuntime = require("regenerator-runtime");
 async function showRecipe() {
     // Load recipe
     try {
@@ -567,19 +550,29 @@ async function showRecipe() {
         (0, _recipeViewDefault.default).renderSpiner();
         await _modelJs.getRecipe(recipeId);
         (0, _recipeViewDefault.default).render(_modelJs.state.recipe);
-        console.log(_modelJs.state.recipe);
+    // console.log(model.state.recipe);
     } catch (err) {
         // alert(`${err} 1010`);
         (0, _recipeViewDefault.default).renderError();
     }
 }
-// ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, showRecipe));
+async function showSearchResuls() {
+    try {
+        const query = (0, _searchViewJsDefault.default).getquery();
+        if (!query) return;
+        await _modelJs.getRecipes(query);
+        console.table(_modelJs.state.search.results);
+    } catch (err) {
+        console.log(err);
+    }
+}
 const init = function() {
     (0, _recipeViewDefault.default).addEventHandler(showRecipe);
+    (0, _searchViewJsDefault.default).addSearchHandler(showSearchResuls);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"49tUX","./model.js":"Y4A21","./views/recipeView":"l60JC","regenerator-runtime/runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"49tUX":[function(require,module,exports) {
+},{"core-js/modules/web.immediate.js":"49tUX","./model.js":"Y4A21","./views/recipeView":"l60JC","regenerator-runtime/runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","regenerator-runtime":"dXNgZ","./views/searchView.js":"9OQAM"}],"49tUX":[function(require,module,exports) {
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("../modules/web.clear-immediate");
 require("../modules/web.set-immediate");
@@ -1710,24 +1703,41 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "getRecipe", ()=>getRecipe);
+parcelHelpers.export(exports, "getRecipes", ()=>getRecipes);
 var _regeneratorRuntime = require("regenerator-runtime");
 var _config = require("./config");
 var _helpers = require("./helpers");
 const state = {
-    recipe: {}
+    recipe: {},
+    search: {
+        query: "",
+        results: []
+    }
 };
 async function getRecipe(recipeId) {
     try {
-        const data = await (0, _helpers.getJSON)(`${(0, _config.API_URL)}=${recipeId}`);
+        const data = await (0, _helpers.getJSON)(`${(0, _config.API_URL)}get?rId=${recipeId}`);
         // console.log(data);
         let { recipe  } = data;
         state.recipe = recipe;
-        console.log(state.recipe);
+    // console.log(state.recipe);
     } catch (err) {
         // alert(`${err} occured and it is happening in the model`);
         throw err;
     }
 }
+async function getRecipes(query) {
+    state.search.query = query;
+    try {
+        const jsonData = await (0, _helpers.getJSON)(`${(0, _config.API_URL)}search?q=${query}`);
+        // console.log(jsonData.recipes);
+        state.search.results = jsonData.recipes;
+    // console.table(state.search.results);
+    } catch (err) {
+        throw err;
+    }
+}
+getRecipes("asparagus");
 
 },{"regenerator-runtime":"dXNgZ","./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dXNgZ":[function(require,module,exports) {
 /**
@@ -2315,7 +2325,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
-const API_URL = "https://forkify-api.herokuapp.com/api/get?rId";
+const API_URL = "https://forkify-api.herokuapp.com/api/";
 const TIMEOUT_SEC = 10;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
@@ -2362,11 +2372,11 @@ const timeout = function(s) {
 };
 async function getJSON(url) {
     try {
-        console.log(url);
         const res = await Promise.race([
             fetch(url),
             timeout((0, _config.TIMEOUT_SEC))
         ]);
+        if (!res.ok) throw new Error(`${data.message}`);
         const data = await res.json();
         return data;
     } catch (err) {
@@ -2389,7 +2399,7 @@ class recipeView {
         this.#data = data;
         const markup = this.#generateMarkup();
         this.#clearElement();
-        console.log(markup);
+        // console.log(markup);
         this.#parenElement.insertAdjacentHTML("afterbegin", markup);
     }
     renderSpiner() {
@@ -2566,6 +2576,28 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
+},{}],"9OQAM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class Search {
+    #parentEl = document.querySelector(".search");
+     #clearInput() {
+        this.#parentEl.querySelector(".search__field").value = "";
+    }
+    getquery() {
+        const query = this.#parentEl.querySelector(".search__field").value;
+        this.#clearInput();
+        return query;
+    }
+    addSearchHandler(handler) {
+        this.#parentEl.addEventListener("submit", (e)=>{
+            e.preventDefault();
+            handler();
+        });
+    }
+}
+exports.default = new Search();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
