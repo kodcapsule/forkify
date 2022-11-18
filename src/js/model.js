@@ -12,13 +12,9 @@ export const state = {
 export async function getRecipe(recipeId) {
   try {
     const data = await getJSON(`${API_URL}get?rId=${recipeId}`);
-    // console.log(data);
     let { recipe } = data;
     state.recipe = recipe;
-
-    // console.log(state.recipe);
   } catch (err) {
-    // alert(`${err} occured and it is happening in the model`);
     throw err;
   }
 }

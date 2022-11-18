@@ -1,77 +1,25 @@
 // import icons from 'url:../views/js/img/icons.svg';
 
 import icons from 'url:../../img/icons.svg';
-class recipeView {
-  #parenElement = document.querySelector('.recipe');
-  #data;
-  #errorMessage = `Could not find recipe with this 101, please try again`;
-  #message = '';
+import View from './view';
 
-  render(data) {
-    this.#data = data;
-
-    const markup = this.#generateMarkup();
-    this.#clearElement();
-
-    // console.log(markup);
-    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  renderSpiner() {
-    const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${icons}#icon-loader"></use>
-      </svg>
-  </div>`;
-    this.#clearElement;
-    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  renderError(message = this.#errorMessage) {
-    const markup = `<div class="error">
-    <div>
-        <use href="${icons}#icon-alert-triangle"></use>
-      </svg>
-    </div>
-    <p>${message}</p>
-  </div>`;
-
-    this.#clearElement;
-    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  renderMessage(message = this.#message) {
-    const markup = `<div class="message">
-    <div>
-        <use href="${icons}#icon-smile"></use>
-      </svg>
-    </div>
-    <p>${message}</p>
-  </div>`;
-
-    this.#clearElement;
-    this.#parenElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  #clearElement() {
-    this.#parenElement.innerHTML = '';
-  }
+class recipeView extends View {
+  _parenElement = document.querySelector('.recipe');
+  _errorMessage = `Could not find recipe with this 101, please try again`;
+  _message = '';
 
   addEventHandler(handle) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handle));
   }
 
-  #generateMarkup() {
+  _generateMarkup() {
     return `     
-    
-    
-    <figure class="recipe__fig">
-      <img src="${this.#data.image_url}" alt="${
-      this.#data.title
+        <figure class="recipe__fig">
+      <img src="${this._data.image_url}" alt="${
+      this._data.title
     }" class="recipe__img" />
       <h1 class="recipe__title">
-        <span>${this.#data.title}</span>
+        <span>${this._data.title}</span>
       </h1>
     </figure>
     
@@ -119,7 +67,7 @@ class recipeView {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">  
-      ${this.#data.ingredients
+      ${this._data.ingredients
         .map(ing => {
           return `
         <li class="recipe__ingredient">
@@ -144,13 +92,13 @@ class recipeView {
       <p class="recipe__directions-text">
         This recipe was carefully designed and tested by
         <span class="recipe__publisher">${
-          this.#data.publisher
+          this._data.publisher
         }</span>. Please check out
         directions at their website.
       </p>
       <a
         class="btn--small recipe__btn"
-        href="${this.#data.source_url}"
+        href="${this._data.source_url}"
         target="_blank"
       >
         <span>Directions</span>

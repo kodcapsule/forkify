@@ -1717,12 +1717,9 @@ const state = {
 async function getRecipe(recipeId) {
     try {
         const data = await (0, _helpers.getJSON)(`${(0, _config.API_URL)}get?rId=${recipeId}`);
-        // console.log(data);
         let { recipe  } = data;
         state.recipe = recipe;
-    // console.log(state.recipe);
     } catch (err) {
-        // alert(`${err} occured and it is happening in the model`);
         throw err;
     }
 }
@@ -2390,67 +2387,24 @@ parcelHelpers.defineInteropFlag(exports);
 // import icons from 'url:../views/js/img/icons.svg';
 var _iconsSvg = require("url:../../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class recipeView {
-    #parenElement = document.querySelector(".recipe");
-    #data;
-    #errorMessage = `Could not find recipe with this 101, please try again`;
-    #message = "";
-    render(data) {
-        this.#data = data;
-        const markup = this.#generateMarkup();
-        this.#clearElement();
-        // console.log(markup);
-        this.#parenElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderSpiner() {
-        const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
-      </svg>
-  </div>`;
-        this.#clearElement;
-        this.#parenElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderError(message = this.#errorMessage) {
-        const markup = `<div class="error">
-    <div>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
-      </svg>
-    </div>
-    <p>${message}</p>
-  </div>`;
-        this.#clearElement;
-        this.#parenElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderMessage(message = this.#message) {
-        const markup = `<div class="message">
-    <div>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
-      </svg>
-    </div>
-    <p>${message}</p>
-  </div>`;
-        this.#clearElement;
-        this.#parenElement.insertAdjacentHTML("afterbegin", markup);
-    }
-     #clearElement() {
-        this.#parenElement.innerHTML = "";
-    }
+var _view = require("./view");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+class recipeView extends (0, _viewDefault.default) {
+    _parenElement = document.querySelector(".recipe");
+    _errorMessage = `Could not find recipe with this 101, please try again`;
+    _message = "";
     addEventHandler(handle) {
         [
             "hashchange",
             "load"
         ].forEach((ev)=>window.addEventListener(ev, handle));
     }
-     #generateMarkup() {
+    _generateMarkup() {
         return `     
-    
-    
-    <figure class="recipe__fig">
-      <img src="${this.#data.image_url}" alt="${this.#data.title}" class="recipe__img" />
+        <figure class="recipe__fig">
+      <img src="${this._data.image_url}" alt="${this._data.title}" class="recipe__img" />
       <h1 class="recipe__title">
-        <span>${this.#data.title}</span>
+        <span>${this._data.title}</span>
       </h1>
     </figure>
     
@@ -2498,7 +2452,7 @@ class recipeView {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">  
-      ${this.#data.ingredients.map((ing)=>{
+      ${this._data.ingredients.map((ing)=>{
             return `
         <li class="recipe__ingredient">
         <svg class="recipe__icon">
@@ -2520,12 +2474,12 @@ class recipeView {
       <h2 class="heading--2">How to cook it</h2>
       <p class="recipe__directions-text">
         This recipe was carefully designed and tested by
-        <span class="recipe__publisher">${this.#data.publisher}</span>. Please check out
+        <span class="recipe__publisher">${this._data.publisher}</span>. Please check out
         directions at their website.
       </p>
       <a
         class="btn--small recipe__btn"
-        href="${this.#data.source_url}"
+        href="${this._data.source_url}"
         target="_blank"
       >
         <span>Directions</span>
@@ -2539,7 +2493,7 @@ class recipeView {
 }
 exports.default = new recipeView();
 
-},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"loVOp":[function(require,module,exports) {
+},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./view":"bWlJ9"}],"loVOp":[function(require,module,exports) {
 module.exports = require("./helpers/bundle-url").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -2576,21 +2530,72 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"9OQAM":[function(require,module,exports) {
+},{}],"bWlJ9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class View {
+    _data;
+    render(data) {
+        this._data = data;
+        const markup = this._generateMarkup();
+        this._clearElement();
+        this._parenElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderSpiner() {
+        const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+      </svg>
+  </div>`;
+        this._clearElement;
+        this._parenElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderError(message = this._errorMessage) {
+        const markup = `<div class="error">
+    <div>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+      </svg>
+    </div>
+    <p>${message}</p>
+  </div>`;
+        this._clearElement;
+        this._parenElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this._message) {
+        const markup = `<div class="message">
+    <div>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+      </svg>
+    </div>
+    <p>${message}</p>
+  </div>`;
+        this._clearElement;
+        this._parenElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    _clearElement() {
+        this._parenElement.innerHTML = "";
+    }
+}
+exports.default = View;
+
+},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9OQAM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class Search {
-    #parentEl = document.querySelector(".search");
-     #clearInput() {
-        this.#parentEl.querySelector(".search__field").value = "";
+    _parentEl = document.querySelector(".search");
+    _clearInput() {
+        this._parentEl.querySelector(".search__field").value = "";
     }
     getquery() {
-        const query = this.#parentEl.querySelector(".search__field").value;
-        this.#clearInput();
+        const query = this._parentEl.querySelector(".search__field").value;
+        this._clearInput();
         return query;
     }
     addSearchHandler(handler) {
-        this.#parentEl.addEventListener("submit", (e)=>{
+        this._parentEl.addEventListener("submit", (e)=>{
             e.preventDefault();
             handler();
         });
